@@ -27,14 +27,12 @@ architecture Behavioral of SEG_7 is
     signal LED_BCD                          : std_logic_vector(3 downto 0);
     signal refresh_counter                  : STD_LOGIC_VECTOR (19 downto 0); --for 10.5ms refresh period.
     signal LED_activating_counter           : std_logic_vector(1 downto 0);
-    --signal displayed_number                 : STD_LOGIC_VECTOR (7 downto 0);
     
 begin
 LED_activating_counter <= refresh_counter(19 downto 18);
     seven_segment_cases: 
         process(LED_BCD)
             begin
-                --displayed_number <= SEVEN_SEG_DATA;
                 case LED_BCD is
                     when "0000" => LED_OUT <= "0000001"; -- "0"     
                     when "0001" => LED_OUT <= "1001111"; -- "1" 
@@ -63,28 +61,16 @@ LED_activating_counter <= refresh_counter(19 downto 18);
                     case LED_activating_counter is
                         when "00" =>
                             ANODE_ACTIVATE <= "0111"; 
-                            -- activate LED1 and Deactivate LED2, LED3, LED4
-                            --LED_BCD <= SEVEN_SEG_DATA(3 downto 0);
                             LED_BCD <= SEVEN_SEG_DATA(15 downto 12);
-                            -- the first hex digit of the 16-bit number
                         when "01" =>
                             ANODE_ACTIVATE <= "1011"; 
-                            -- activate LED2 and Deactivate LED1, LED3, LED4
-                            --LED_BCD <= SEVEN_SEG_DATA(7 downto 4);
                             LED_BCD <= SEVEN_SEG_DATA(11 downto 8);
-                            -- the second hex digit of the 16-bit number
                         when "10" =>
                             ANODE_ACTIVATE <= "1101"; 
-                            -- activate LED3 and Deactivate LED2, LED1, LED4
-                            --LED_BCD <= SEVEN_SEG_DATA(11 downto 8);
                             LED_BCD <= SEVEN_SEG_DATA(7 downto 4);
-                            -- the third hex digit of the 16-bit number
                         when "11" =>
                             ANODE_ACTIVATE <= "1110"; 
-                            -- activate LED4 and Deactivate LED2, LED3, LED1
-                            --LED_BCD <= SEVEN_SEG_DATA(15 downto 12);
                             LED_BCD <= SEVEN_SEG_DATA(3 downto 0);
-                            -- the fourth hex digit of the 16-bit number    
                     end case;
         end process; 
     led_count: 
